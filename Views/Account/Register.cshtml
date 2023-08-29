@@ -1,0 +1,63 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+<div class="row">
+    <div class="col-4 offset-4">
+        <h1 class="display-4 border-bottom text-center pb-2">@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4 offset-4">
+        @*asp-controller,asp-action falan vermemisikse movcud sehifenin tepesine dogru datalari url-e basacaq*@
+        <form method="post" autocomplete="off">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+            @*asp-for tag helperi ile modelimizin propertylerini label-e baglayib, onun butun
+            limitlerini, validationlarini, displaylerini vs baglayiriq label ve inputa*@
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label ">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="johndoe"></input>
+                <span class="text-danger small" asp-validation-for="Email"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserName" class="form-label ">Username</label>
+                <input asp-for="UserName" class="form-control" placeholder="johndoe"></input>
+                <span class="text-danger small" asp-validation-for="UserName"></span>
+            </div>
+
+            <div class="form-group mb-3 d-flex align-items-end">
+                    <div class="input-part col-12 ">
+                        <label asp-for="Password" class="form-label d-flex align-items-center ">Şifrə</label>
+                        <input asp-for="Password" type="password" class="form-control custom-form-input" placeholder=""></input>
+
+                        <span class="text-black small" asp-validation-for="Password"></span>
+                    </div>
+
+                    <div class="hide-open-password col-1  d-flex justify-content-center">
+                        <button type="button" id="hide-open-button" class=" btn rounded-circle border-0"><i class="fa-solid fa-eye fa-lg "></i></butto>
+                    </div>
+
+
+
+            </div>
+
+
+            <div class="form-group mb-3">
+                <label asp-for="RePassword" class="form-label ">Repassword</label>
+                <input asp-for="RePassword" type="password" class="form-control" placeholder="Password!"></input>
+                <span class="text-danger small" asp-validation-for="RePassword"></span>
+            </div>
+
+
+            <div class="form-group mb-3 d-grid ">
+                <button type="submit" class="btn btn-primary d-block"><i class="fa-solid fa-user-plus me-2"></i>Register</button>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>

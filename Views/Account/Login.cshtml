@@ -1,0 +1,56 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="container">
+    <div class="row   d-flex justify-content-center">
+        <div class="col-md-4  col-8 ">
+            <h1 class="display-4 border-bottom text-center pb-2">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+    <div class="col-md-4  col-8   ">
+        @*asp-controller,asp-action falan vermemisikse movcud sehifenin tepesine dogru datalari url-e basacaq*@
+        <form method="post" autocomplete="off">
+
+            <div asp-validation-summary="ModelOnly" class="text-black px-auto px-4 mt-2"></div>
+            @*asp-for tag helperi ile modelimizin propertylerini label-e baglayib, onun butun
+            limitlerini, validationlarini, displaylerini vs baglayiriq label ve inputa*@
+
+            <div class="form-group mb-3">
+                <label asp-for="UsernameOrEmail" class="form-label ">Email yaxud istifadəçi adı</label>
+                <input asp-for="UsernameOrEmail" class="form-control custom-form-input mb-2" placeholder=""
+></input>
+                <span class="text-black small " asp-validation-for="UsernameOrEmail"></span>
+            </div>
+
+            
+            <div class="form-group mb-3 d-flex align-items-end">
+                    <div class="input-part col-12 ">
+                        <label asp-for="Password" class="form-label d-flex align-items-center ">Password</label>
+                        <input asp-for="Password" type="password" class="form-control custom-form-input" placeholder=""></input>
+
+                        <span class="text-black small" asp-validation-for="Password"></span>
+                    </div>
+
+                    <div class="hide-open-password col-1  d-flex justify-content-center">
+                        <button type="button" id="hide-open-button" class=" btn rounded-circle border-0"><i class="fa-solid fa-eye fa-lg "></i></butto>
+                    </div>
+
+                    
+                
+            </div>
+
+
+
+            <div class="form-group mb-3 d-grid ">
+                <button type="submit" class="btn  submit-btn-transparent d-block"><i class="fa-solid fa-arrow-right-to-bracket me-2"></i>Daxil ol</button>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+</div>

@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Create set";
+}
+
+@model SetViewModel;
+<div class="container  mt-1">
+<div class="row ">
+        <h2>Create a new study set</h2>
+        <form asp-controller="Account" asp-action="CreateSet" >
+            <div asp-validation-summary="ModelOnly" class="text-white fs-5 me-2"></div>
+            <div class="row">
+                <div class="metadatas col-8">
+                    <div class="form-group">
+                        <label asp-for="Title" class="form-label">Title</label>
+                        <input type="text"  asp-for="Title" class="form-control custom-form-input " />
+                        <span asp-validation-for="Title" class="text-white"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea rows="1" type="text"  asp-for="Description" class="form-control  autoresizing custom-form-input" contenteditable="true"></textarea>
+                    </div>
+
+                    <div class="form-check mt-2 ms-1 col-4">
+                        <input asp-for="isPublic" type="checkbox" class="form-check-input me-2 checkbox-lg custom-form-input" />
+                        <label class="form-label">Make my set public</label>
+                    </div>
+                </div>
+                <div class=" col-4 d-flex align-items-center justify-content-center">
+                    <button class="btn submit-btn-transparent h-50 w-50 py-3 ">
+                        Create
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="border-bottom pb-1">Cards</h3>
+            <div class="row ">
+                <div id="creating-term-container">
+                    @if (Model.TermsViewModels != null)
+                    {
+                        for (int i = 0; i < Model.TermsViewModels.Count; i++)
+                        {
+                            <div class="form-group d-flex align-items-center justify-content-between mb-3">
+                                <div class="col-4">
+                                    <label class="form-label termLabel">Term @(
+                                i + 1
+                                )</label>
+                                    <input type="text" asp-for="TermsViewModels[i].Term" class="form-control term custom-form-input" placeholder="Enter term" />
+                                    <span class="text-white small" asp-validation-for="TermsViewModels[i].Term" ></span>
+                                </div>
+                                <div class="col-5 ">
+                                    <label class="form-label ">Definiton</label>
+                                    <textarea rows="1" type="text" asp-for="TermsViewModels[i].TermDefinition" class="form-control autoresizing def custom-form-input" placeholder="Enter definiton"></textarea>
+                                </div>
+                                <div class="col-2 pt-4">
+
+                                    <button onclick="this.parentElement.parentElement.remove();changeOrder()"; class="btn bg-white ms-2" type="button"><i class=" btn bg-white fa-sharp fa-solid fa-trash text-danger"></i></button>
+                                </div>
+
+
+                            </div>
+
+
+                        }
+                    }
+
+                    
+                </div>
+
+                <div class="form-group mt-3 py-3 col-4 mx-auto">
+                    <button @*asp-action="AddTerm"*@ type="button" id="addMoreTerms" class="btn submit-btn-transparent w-100">Add Card</button>
+                </div>
+            </div>
+
+        </form>
+</div>
+</div>

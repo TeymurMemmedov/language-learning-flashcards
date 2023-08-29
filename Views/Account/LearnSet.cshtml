@@ -1,0 +1,204 @@
+﻿@model SetViewModel;
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+
+<div class="container">
+    <div class="row vh-100 ">
+        <div class="col-md-8 col-10   mt-3 " id="carousel-container">
+            <div class="slider-heading">
+                <h1>@Model.Title</h1>
+                <button type="button" class="btn" id="settingsModalOpener" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear fa-2xl"></i></button>
+
+            </div>
+
+            <div id="carouselExampleInterval" class="carousel slide carousel-dark">
+                <div class="carousel-inner h-100">
+                    @for (int i = 0; i < Model.TermsViewModels.Count; i++)
+                    {
+                        
+                        if (i == 0)
+                        {
+                            <div class="carousel-item active">
+                                <div class="card-inner">
+                                    <div class="card-front">
+                                        <span>@Model.TermsViewModels[i].Term</span>
+                                    </div>
+                                    <div class="card-back">
+                                        <span>@Model.TermsViewModels[i].TermDefinition</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        }
+                        else
+                        {
+
+                            <div class="carousel-item">
+                                <div class="card-inner">
+                                    <div class="card-front">
+                                        <span>@Model.TermsViewModels[i].Term</span>
+                                    </div>
+                                    <div class="card-back">
+                                        <span>@Model.TermsViewModels[i].TermDefinition</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        }
+
+                        
+}
+                    
+                </div>
+            </div>
+
+            <div class="slider-controls col-md-7 col-9 mt-2">
+                <div class="main-controls">
+                    <div class="auto-and-remix">
+                        <button title="Auto-oxut" id="autoplay" class="btn rounded-circle  me-2"><i class="fa-solid fa-forward-fast"></i></button>
+                        <button title="Dayandır" id="pause" class="btn rounded-circle "><i class="fa-solid fa-pause"></i></button>
+                    </div>
+                    <div title="Manual idarə" class="slider-navigators">
+                        <button class="btn slider-navigator" id="prev">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+
+                        <div class="slider-number mx-2">
+                            <span></span>
+                        </div>
+
+                        <button class="btn slider-navigator" id="next">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- <div class="slider-config">
+                        <button id="changeTheFaces" class="btn rounded-circle "><i class="fa-solid fa-repeat"></i></button>
+                    </div> -->
+                </div>
+                <div class="progress-bar"></div>
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+    <h3 class="border-bottom pb-1">Kartlar</h3>
+    <div class="row ">
+        <div id="creating-term-container">
+            @if (Model.TermsViewModels != null)
+            {
+                for (int i = 0; i < Model.TermsViewModels.Count; i++)
+                {
+                    <div class="form-group d-flex align-items-center justify-content-between mb-3 col-8">
+                        <div class="col-5">
+                            <label class="form-label termLabel">
+                                Term @(
+                              i + 1
+                              )
+                            </label>
+                            <input type="text" asp-for="TermsViewModels[i].Term" class="form-control term custom-form-input" readonly />
+                            <span class="text-white small" asp-validation-for="TermsViewModels[i].Term"></span>
+                        </div>
+                        <div class="col-5 ">
+                            <label class="form-label ">Definition</label>
+                            <textarea rows="1" type="text" asp-for="TermsViewModels[i].TermDefinition" class="form-control autoresizing def custom-form-input" readonly></textarea>
+                        </div>
+                      
+
+
+                    </div>
+
+
+                }
+            }
+
+
+        </div>
+
+    <div id="settingsModal" class="modal fade" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Seçimlər</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="speed d-flex justify-content-between  mb-3">
+                        <span>Speed</span>
+                        <div class="speed-options">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="speed" id="0.5x" value="slow">
+                                <label class="form-check-label" for="0.5x">
+                                    Slow
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="speed" id="1x" value="normal" checked>
+                                <label class="form-check-label" for="1x">
+                                    Normal
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="speed" id="2x" value="fast">
+                                <label class="form-check-label" for="2x">
+                                    Fast
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="frontOfCard d-flex justify-content-between mb-3">
+                        <span>On front of card</span>
+                        <div class="frontOptions">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="frontOfCard" id="terms" value="terms" checked>
+                                <label class="form-check-label" for="terms">Term</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="frontOfCard" id="definitions" value="definitions">
+                                <label class="form-check-label" for="definitions">Definition</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="orderOfCards d-flex justify-content-between">
+                        <span>Order of cards:</span>
+                        <div class="frontOptions">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="orderOfCards" id="default" value="default" checked>
+                                <label class="form-check-label" for="default">Normal</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="orderOfCards" id="shuffle" value="shuffle">
+                                <label class="form-check-label" for="shuffle">Mixed</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveSettings">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row">
+         <div class="col-4 border border-2 border-secondary"></div>
+    </div> -->
+</div>
