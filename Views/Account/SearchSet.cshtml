@@ -18,18 +18,22 @@
                         }
                         else
                         {
-                            <i class="fa-solid fa-lock-open fa-lg"></i>
+                            <i class="fa-solid fa-lock-open fa-lg my-3"></i>
                         }
                         <div class="card-actions">
-                            <a asp-action="EditSet" asp-route-id="@ViewBag.ids[i]" class="btn btn-primary">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
-
-                            @if (@ViewBag.ownerNames[i] == User.FindFirst("Username").Value)
+                            @if (User.Identity.IsAuthenticated)
                             {
-                                <btn @*asp-controller="Account" asp-action="DeleteSet" asp-route-id = "@ViewBag.ids[i]"*@ class="btn btn-danger toggleMyModal">
-                                    <i class="fa-solid fa-trash"></i>
-                                </btn>
+                                <a asp-action="EditSet" asp-route-id="@ViewBag.ids[i]" class="btn btn-primary">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+
+                                @if (@ViewBag.ownerNames[i] == User.FindFirst("Username").Value || User.IsInRole("Admin"))
+
+                                {
+                                    <btn @*asp-controller="Account" asp-action="DeleteSet" asp-route-id = "@ViewBag.ids[i]"*@ class="btn btn-danger toggleMyModal">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </btn>
+                                }
                             }
                         </div>
 

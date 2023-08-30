@@ -18,7 +18,7 @@
                         }
                         else
                         {
-                            <i class="fa-solid fa-lock-open fa-lg my-2"></i>
+                            <i class="fa-solid fa-lock-open fa-lg my-3"></i>
                         }
 
                         <div class="card-actions">
@@ -28,8 +28,9 @@
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
 
-                                @if (@ViewBag.ownerNames[i] == User.FindFirst("Username").Value)
-                                {
+                                @if (@ViewBag.ownerNames[i] == User.FindFirst("Username").Value || User.IsInRole("Admin") )
+
+                        {
                                     <btn @*asp-controller="Account" asp-action="DeleteSet" asp-route-id = "@ViewBag.ids[i]"*@ class="btn btn-danger toggleMyModal">
                                         <i class="fa-solid fa-trash"></i>
                                     </btn>

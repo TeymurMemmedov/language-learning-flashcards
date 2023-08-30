@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row vh-100 ">
-        <div class="col-md-8 col-10   mt-3 " id="carousel-container">
+        <div class="col-md-8 col-10   mt-2 " id="carousel-container">
             <div class="slider-heading">
                 <h1>@Model.Title</h1>
                 <button type="button" class="btn" id="settingsModalOpener" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear fa-2xl"></i></button>
@@ -90,11 +90,23 @@
         </div>
 
 
+        <div class="description  p-2 col-4 h-50 mt-5 text-center ">
+
+            <h2>Description</h2>
+                <p class="fs-4">
+                    @Model.Description
+                </p>
+        </div>
+
 
     </div>
 
-    <h3 class="border-bottom pb-1">Kartlar</h3>
+    
+     
+
+    <h3 class="border-bottom pb-1">Cards</h3>
     <div class="row ">
+
         <div id="creating-term-container">
             @if (Model.TermsViewModels != null)
             {
@@ -198,7 +210,4 @@
         </div>
     </div>
 
-    <!-- <div class="row">
-         <div class="col-4 border border-2 border-secondary"></div>
-    </div> -->
 </div>

@@ -96,7 +96,7 @@ function renderTermInputGroup(termCount) {
         newTermInputGroup.remove();
         changeOrder();
     });
-    console.log("salam")
+
 }
 
 function changeOrder() {
@@ -106,7 +106,7 @@ function changeOrder() {
 
     termInputs.forEach((termInput, index) => {
         const termCount = index + 1;
-        termLabels[index].innerHTML = `İfadə ${termCount}`;
+        termLabels[index].innerHTML = `Term ${termCount}`;
         termInput.name = `TermsViewModels[${index}].Term`;
         defInputs[index].name = `TermsViewModels[${index}].TermDefinition`;
     });
@@ -212,7 +212,6 @@ let sliderOptions = {
         }
     }
 }
-// Sayti ilk defe acanlarinda brauzerinde bele bir sey yoxdu :()
 
 
 let userPreferences = JSON.parse(localStorage.getItem("userPreferences"))
@@ -226,7 +225,6 @@ let allInputs = settingsModal.querySelectorAll("input[type='radio']")
         }
     })
 }
-// carousel["_config"].interval = (sliderOptions. speedOptions.interval/sliderOptions.speedOptions.speeds[userPreferences.speed])*4
 carousel = new bootstrap.Carousel(myCarousel,
     {
         interval: (sliderOptions.speedOptions.interval / sliderOptions.speedOptions.speeds[userPreferences.speed]) * 2 + 600 * sliderOptions.speedOptions.speeds[userPreferences.speed],
@@ -256,9 +254,6 @@ if (settingSaveBtn != null) {
         let settingsModal = document.querySelector("#settingsModal")
         let allInputs = settingsModal.querySelectorAll("input[type='radio']")
         allInputs.forEach(input => input.checked = false)
-        // for (let i = 0; i < allInputs.length; i++) {
-        //     allInputs[i].checked = false
-        // }
         userPreferences = JSON.parse(localStorage.getItem("userPreferences"))
         allInputs.forEach(input => {
             if (input.value == userPreferences.speed || input.value == userPreferences.frontOfCard || input.value == userPreferences.orderOfCards) {
@@ -274,14 +269,12 @@ if (settingSaveBtn != null) {
 
         window.location.href = modifiedUrl
 
-        /*location.reload();*/
 
 
     })
 }
 
 
-//Sliderin irəli geri idarə edilməsi
 let nextSlide = document.querySelector("#next")
 let prevSlide = document.querySelector("#prev")
 
@@ -317,8 +310,6 @@ if (pauseBtn != null) {
 }
 
 
-
-//Kartları çevirmək
 function flipCard(card) {
     if (card.style.transform == "" || card.style.transform == "rotateX(0deg)") {
         card.style.transform = "rotateX(180deg)"
@@ -371,7 +362,7 @@ if (autoPlayer != null) {
 
 
                     }
-                },13000)
+                },12000)
               
             }
           

@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-    @*<link rel="stylesheet" href="~/LoginRegister.styles.css" asp-append-version="true" />*@
 </head>
 <body>
     <header>
@@ -25,9 +24,6 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @*<li class="nav-item">
-                            <a class="nav-link active">About</a>
-                        </li>*@
                          <li class="nav-item dropdown me-2">
                             
                               <a class="nav-link active dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,7 +46,7 @@
                         }
                         </ul>
 
-                    <form class="d-flex me-3" role="search" asp-controller="Account" asp-action="SearchSet" method="get">
+                    <form class="d-flex me-3" role="search" asp-controller="Account" asp-action="SearchSet" method="get" autocomplete="off">
                         <input class="form-control  custom-form-input me-2" type="search" placeholder="Search sets" aria-label="Search" name="searchedword">
                         <button class="btn nav-btn-outline submit-btn-transparent" type="submit">Search</button>
                     </form>

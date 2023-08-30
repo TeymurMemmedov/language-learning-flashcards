@@ -1,19 +1,12 @@
-﻿// LearningCards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// LearningCards.Controllers.AccountController
-using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Security.Claims;
-using System.Xml.Linq;
 using LearningCards.Context;
 using LearningCards.Entities;
 using LearningCards.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using NETCore.Encrypt.Extensions;
 
 [Authorize]
@@ -55,15 +48,15 @@ public class AccountController : Controller
             user.Email = model2.Email;
             user.Username = model2.UserName;
             user.Password = HashPassword(model2.Password);
-            user.role = _databaseContext.Roles.SingleOrDefault( x => x.Name == model2.RoleName);
-            user.roleId = _databaseContext.Roles.SingleOrDefault( x => x.Name == model2.RoleName).Id;
+            user.role = _databaseContext.Roles.SingleOrDefault(x => x.Name == model2.RoleName);
+            user.roleId = _databaseContext.Roles.SingleOrDefault(x => x.Name == model2.RoleName).Id;
             User entity = user;
             int num = 0;
             try
             {
                 _databaseContext.Users.Add(entity);
                 num = _databaseContext.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login");
             }
             catch (Exception)
             {
@@ -91,6 +84,7 @@ public class AccountController : Controller
             if (model2.UsernameOrEmail.Contains('@'))
             {
                 user = _databaseContext.Users.SingleOrDefault((User x) => x.Email == model2.UsernameOrEmail && x.Password == hashedPassword);
+                
             }
             else
             {
@@ -149,7 +143,8 @@ public class AccountController : Controller
         [StringLength(30, MinimumLength = 5, ErrorMessage = "İstifadəçi adı minimum 5, maksimum 30 simvoldan ibarət olmalıdır")]
         [RegularExpression(@"^[a-zA-Z][a-zA-Z0-9._]*$", ErrorMessage = "Invalid username format.")] string Username)
     {
-        if (ModelState.IsValid) {
+        if (ModelState.IsValid)
+        {
             User user = _databaseContext.Users.SingleOrDefault(x => x.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier));
             string name = _databaseContext.Roles.SingleOrDefault((Role x) => x.Id == user.roleId).Name;
             user.Username = Username;
@@ -163,13 +158,10 @@ public class AccountController : Controller
                 };
             ClaimsIdentity identity = new ClaimsIdentity(claims, "Cookies");
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-            base.HttpContext.SignInAsync("Cookies", principal);
-            bool ısAuthenticated = base.User.Identity.IsAuthenticated;
+            HttpContext.SignInAsync("Cookies", principal);
             return RedirectToAction("Profile");
-            
-         
-            //HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, User);
-           
+
+
         }
 
         return View("Profile");
