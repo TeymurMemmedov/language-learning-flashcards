@@ -7,6 +7,7 @@ using LearningCards.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NETCore.Encrypt.Extensions;
 
 [Authorize]
@@ -41,29 +42,27 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Register(RegisterViewModel model)
     {
-        RegisterViewModel model2 = model;
         if (ModelState.IsValid)
         {
-            User user = new User();
-            user.Email = model2.Email;
-            user.Username = model2.UserName;
-            user.Password = HashPassword(model2.Password);
-            user.role = _databaseContext.Roles.SingleOrDefault(x => x.Name == model2.RoleName);
-            user.roleId = _databaseContext.Roles.SingleOrDefault(x => x.Name == model2.RoleName).Id;
-            User entity = user;
-            int num = 0;
-            try
-            {
-                _databaseContext.Users.Add(entity);
-                num = _databaseContext.SaveChanges();
-                return RedirectToAction("Login");
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError("", "İstifadəçi adı, yaxud e-mail artıq mövcuddur. Başqasını daxil edin");
-            }
+            User user = new User() {
+                Email= model.Email,
+                Username = model.UserName,
+                Password=HashPassword(model.Password),
+                role = _databaseContext.Roles.SingleOrDefault(x => x.Name == model.RoleName),
+                roleId = _databaseContext.Roles.SingleOrDefault(x => x.Name == model.RoleName).Id
+        };
+        try
+        {
+            _databaseContext.Users.Add(user);
+            _databaseContext.SaveChanges();
+            return RedirectToAction("Login");
         }
-        return View(model2);
+        catch (Exception)
+        {
+            ModelState.AddModelError("", "Username or email exists already. Please try another one.");
+        }
+        }
+        return View(model);
     }
 
     [AllowAnonymous]
@@ -128,7 +127,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            User user = _databaseContext.Users.SingleOrDefault((User x) => x.Id.ToString() == User.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"));
+            User user = _databaseContext.Users.SingleOrDefault((User x) => x.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier));
             user.Password = HashPassword(Password);
             _databaseContext.SaveChanges();
             ViewData["result"] = "Password Changed";
@@ -213,65 +212,53 @@ public class AccountController : Controller
 
     public IActionResult GetAllSets()
     {
-        User user = _databaseContext.Users.SingleOrDefault((User x) => x.Id.ToString() == User.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"));
-        List<SetViewModel> list = new List<SetViewModel>();
-        List<int> list2 = new List<int>();
-        List<TermSet> list3 = _databaseContext.TermSets.Where((TermSet x) => x.ownerUserId == user.Id).ToList();
-        foreach (TermSet termSet in list3)
+        User user = _databaseContext.Users.
+        SingleOrDefault(u => u.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+         var setViewModels = _databaseContext.TermSets
+        .Include(t => t.Terms)
+        .Where(t => t.ownerUserId == user.Id)
+        .Select(t => new SetViewModel
         {
-            SetViewModel setViewModel = new SetViewModel
+            Id = t.Id, 
+            Title = t.Title,
+            Description = t.Description,
+            isPublic = t.isPublic,
+            TermsViewModels = t.Terms.Select(term => new TermViewModel
             {
-                Title = termSet.Title,
-                Description = termSet.Description,
-                isPublic = termSet.isPublic
-            };
-            list2.Add(termSet.Id);
-            termSet.Terms = _databaseContext.Terms.Where((Term x) => x.TermSetId == termSet.Id).ToList();
-            foreach (Term term in termSet.Terms)
-            {
-                setViewModel.TermsViewModels.Add(new TermViewModel
-                {
-                    Term = term.Name,
-                    TermDefinition = term.Definition
-                });
-            }
-            list.Add(setViewModel);
-        }
-        base.ViewBag.ids = list2;
-        return View(list);
+                Term = term.Name,
+                TermDefinition = term.Definition
+            }).ToList()
+        }).ToList();
+
+        ViewBag.ids = setViewModels.Select(s => s.Id).ToList();
+        return View(setViewModels);
     }
 
     [AllowAnonymous]
     public IActionResult GetAllPublicSets()
     {
-        List<SetViewModel> list = new List<SetViewModel>();
-        List<int> list2 = new List<int>();
-        List<string> list3 = new List<string>();
-        List<TermSet> list4 = _databaseContext.TermSets.Where((TermSet x) => x.isPublic == true).ToList();
-        foreach (TermSet termSet in list4)
-        {
-            SetViewModel setViewModel = new SetViewModel
-            {
-                Title = termSet.Title,
-                Description = termSet.Description,
-                isPublic = termSet.isPublic
-            };
-            list2.Add(termSet.Id);
-            list3.Add(_databaseContext.Users.SingleOrDefault((User x) => x.Id == termSet.ownerUserId).Username);
-            termSet.Terms = _databaseContext.Terms.Where((Term x) => x.TermSetId == termSet.Id).ToList();
-            foreach (Term term in termSet.Terms)
-            {
-                setViewModel.TermsViewModels.Add(new TermViewModel
-                {
-                    Term = term.Name,
-                    TermDefinition = term.Definition
-                });
-            }
-            list.Add(setViewModel);
-        }
-        base.ViewBag.ids = list2;
-        base.ViewBag.ownerNames = list3;
-        return View(list);
+
+        var setViewModels = _databaseContext.TermSets
+       .Include(t => t.Terms)
+       .Where(t => t.isPublic == true)
+       .Select(t => new SetViewModel
+       {
+           Id = t.Id,
+           Title = t.Title,
+           Description = t.Description,
+           isPublic = t.isPublic,
+           ownerUserName = t.ownerUser.Username,
+           TermsViewModels = t.Terms.Select(term => new TermViewModel
+           {
+               Term = term.Name,
+               TermDefinition = term.Definition
+           }).ToList()
+       }).ToList();
+
+        ViewBag.ids = setViewModels.Select(s => s.Id).ToList();
+        ViewBag.ownerNames = setViewModels.Select(s=>s.ownerUserName).ToList();
+        return View(setViewModels);
     }
 
     public IActionResult DeleteSet(int id)

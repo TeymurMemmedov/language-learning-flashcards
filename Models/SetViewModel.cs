@@ -6,6 +6,7 @@ namespace LearningCards.Models
 
 
     {
+        public int? Id { get; set; }
         [Required(ErrorMessage = "Başlıq boş qoyula bilməz")]
         [StringLength(100, ErrorMessage = "Başlıq 100 simvoldan uzun ola bilməz")]
         public string Title { get; set; }
@@ -14,6 +15,7 @@ namespace LearningCards.Models
 
         public bool isPublic { get; set; }
 
+        public string? ownerUserName { get; set; }
         
         public List<TermViewModel> TermsViewModels { get;set; } = new List<TermViewModel>() { 
 
